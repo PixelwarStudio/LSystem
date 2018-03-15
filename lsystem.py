@@ -1,11 +1,10 @@
-import attr
+from random import random
+from functools import reduce
 
-@attr.s
 class LSystem(object):
-    axiom = attr.ib()
-    rules = attr.ib()
-
-    def __attrs_post_init__(self):
+    def __init__(self, axiom, rules):
+        self.axiom = axiom
+        self.rules = rules
         self.state = self.axiom
         self.generation = 0
 
@@ -14,7 +13,7 @@ class LSystem(object):
             new_state = ""
             for symbol in self.state:
                 if symbol in self.rules:
-                    new_state += self.rules[symbol]
+                    new_state += self._get_successor(symbol)
                 else:
                     new_state += symbol
             self.state = new_state
@@ -25,7 +24,7 @@ class LSystem(object):
     
     def _get_successor(self, symbol):
         return self.rules[symbol]
-    
+
     def __len__(self):
         return len(self.state)
 
@@ -37,3 +36,31 @@ class LSystem(object):
 
     def __iter__(self):
         return iter(self.state)
+
+class ProbLSystem(LSystem):
+    def __init__(self, axiom, rules):
+        super().__init__(axiom, rules)
+
+        self.total = {}
+        for symbol, successors in self.rules.items():
+            self.total[symbol] = 0
+            for successor in successors:
+                self.total[symbol] += successor[0]
+
+    def _get_successor(self, symbol):
+        variants = self.rules[symbol]
+        
+        choosen_variant = random() * self.total[symbol]
+
+        sum_prev = 0
+        for variant in variants:
+            sum_prev += variant[0]
+            if sum_prev >= choosen_variant:
+                return variant[1]
+
+class ContexLSystem(LSystem):
+    pass
+
+class ParametricLSystem(LSystem):
+    pass
+
