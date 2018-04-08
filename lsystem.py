@@ -30,10 +30,10 @@ class LSystem(object):
         """Reset the state to axiom."""
         self.axiom = self.state
     
-    def interpret(self):
+    def interpret(self, *args):
         """Interpret every symbol in current state"""
         for symbol in self:
-            symbol.interpret()
+            symbol.interpret(args)
 
     def __len__(self):
         return len(self.state)
@@ -55,7 +55,7 @@ class Symbol(object):
     def replace(self):
         return (self,)
     
-    def interpret(self):
+    def interpret(self, *args):
         pass
 
     def __str__(self):
