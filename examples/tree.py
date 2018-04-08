@@ -1,9 +1,8 @@
 from PIL import Image
 from lsystem import LSystem, Const, Var
+from symbols import Rotate as Rot, Push, Pop
 from PillowTurtle import Turtle
 from random import randint
-
-turtle = Turtle()
 
 class Branch(Var):
     def __init__(self, length, width):
@@ -28,45 +27,29 @@ class Branch(Var):
             Push(), Rot(62), Branch(self.length*.45, w), Pop()
         )
 
-    def interpret(self):
+    def interpret(self, args):
+        turtle = args[0]
         turtle.color = (85, 26, 0)
         turtle.width = self.width
         turtle.forward(self.length)
 
 class Leaf(Const):
-    def interpret(self):
+    def interpret(self, args):
+        turtle = args[0]
         turtle.color = (10, 230, 40)
         turtle.width = 2
         turtle.forward(10)
 
-class Rot(Const):
-    def __init__(self, angle):
-        self.angle = angle
-    
-    def interpret(self):
-        turtle.rotate(self.angle)
-
-class Pop(Const):
-    def interpret(self):
-        turtle.pop()
-
-class Push(Const):
-    def interpret(self):
-        turtle.push()
-
 def main():
     im = Image.new("RGB", (1000, 1000))
-
-    turtle.x = 500
-    turtle.y = 1000
-    turtle.rot = -90
+    turtle = Turtle([500, 1000], -90)
 
     system = LSystem(
-        axiom=(Branch(500, 20), ) 
+        axiom=(Branch(300, 20), ) 
     )
 
     system.step(7)
-    system.interpret()
+    system.interpret(turtle)
 
     turtle.draw(im)
     im.show()
