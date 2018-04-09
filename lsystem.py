@@ -18,10 +18,10 @@ class LSystem(object):
         """
         for _ in range(steps):
             new_state = []
-            for n, symbol in enumerate(self.state):
+            for symbol in self:
                 # Update neighbors of context-sensitive symbols 
                 if isinstance(symbol, ContextVar):
-                    symbol.neighbors = symbol.__get_neighbors(n, self)
+                    symbol.neighbors = symbol.get_neighbors(self)
                 new_state += symbol.replace()
             self.state = tuple(new_state)
         self.generation += steps
@@ -71,7 +71,8 @@ class ContextVar(Var):
     def __init__(self):
         self.neighbors = (None, None)
     
-    def __get_neighbors(self, pos, lsystem):
+    def get_neighbors(self, lsystem):
+        pos = lsystem.state.index(self)
         rneighbor, lneighbor = None, None
         lbound, rbound = lambda pos: pos >= 0, lambda pos: pos < len(lsystem)
         
@@ -84,7 +85,7 @@ class ContextVar(Var):
                     if rneighbor is not None:
                         break
 
-            if rbound(lpos):
+            if rbound(rpos):
                 if rneighbor is None and isinstance(lsystem[rpos], Var):
                     rneighbor = lsystem[rpos]
                     if lneighbor is not None:
