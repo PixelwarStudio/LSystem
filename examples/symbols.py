@@ -1,9 +1,9 @@
 """Here you can find some common Symbols suited to interpreted with PillowTurtle"""
 from PillowTurtle import Turtle
-from lsystem import LSystem, Var, Const
+from lsystem import LSystem, Var, Const, Symbol
 
 # Variables
-class Forward(Var):
+class Forward(Symbol):
     def __init__(self, dist=5):
         self.dist = dist
     
