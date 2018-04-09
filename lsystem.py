@@ -95,7 +95,7 @@ class ContextVar(Var):
 
         return (lneighbor, rneighbor)
 
-def choose(symbol, *rules):
+def choose(*rules):
         total = sum([prob for (prob, rule) in rules])
         choosen_rule = random() * total
 
@@ -103,4 +103,4 @@ def choose(symbol, *rules):
         for (prob, rule) in rules:
             sum_prev += prob
             if sum_prev >= choosen_rule:
-                return rule(symbol)
+                return rule
