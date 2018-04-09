@@ -10,13 +10,11 @@ class F(Forward):
 
     def replace(self):
         angle = 25.7
-        variants = (
-            (F(), Push(), Rot(angle), F(), Pop(), F(), Push(), Rot(-angle), F(), Pop(), F()),
-            (F(), Push(), Rot(angle), F(), Pop(), F()),
-            (F(), Push(), Rot(-angle), F(), Pop(), F())
+        return choose(
+            (1, (F(), Push(), Rot(angle), F(), Pop(), F(), Push(), Rot(-angle), F(), Pop(), F())),
+            (1, (F(), Push(), Rot(angle), F(), Pop(), F())),
+            (1, (F(), Push(), Rot(-angle), F(), Pop(), F()))
         )
-        return variants[randrange(len(variants))]
-        #return (F(), Push(), Rot(45), Pop(), F(), Push(), Rot(-45), F(), Pop(), F())
  
 
 def main():
