@@ -1,14 +1,12 @@
 """
-Module for handle lsystems.
+Module for handle lsystems and interpret them.
 """
 from random import random
-from functools import reduce
 
 class LSystem(object):
-    """A simple LSystem without extras"""
-    def __init__(self, axiom, rules):
+    """A simple LSystem"""
+    def __init__(self, axiom):
         self.axiom = axiom
-        self.rules = rules
         self.state = self.axiom
         self.generation = 0
     
@@ -19,36 +17,33 @@ class LSystem(object):
             steps (int): Indicate how many times the rules will be applied.
         """
         for _ in range(steps):
-            new_state = ""
-            for symbol in self.state:
-                if symbol in self.rules:
-                    new_state += self._get_successor(symbol)
-                else:
-                    new_state += symbol
-            self.state = new_state
+            new_state = []
+            for symbol in self:
+                # Update neighbors of context-sensitive symbols 
+                if isinstance(symbol, ContextVar):
+                    symbol.neighbors = symbol.get_neighbors(self)
+                new_state += symbol.replace()
+            self.state = tuple(new_state)
         self.generation += steps
     
     def reset(self):
         """Reset the state to axiom."""
         self.axiom = self.state
     
-    def _get_successor(self, symbol):
-        """Find the proper rule for the symbol.
-
-        Args:
-            symbol (str): The symbol.
-
-        Returns:
-            str: The successor of the symbol.
-        """
-        
-        return self.rules[symbol]
+    def interpret(self, *args):
+        """Interpret every symbol in current state"""
+        for symbol in self:
+            symbol.interpret(args)
 
     def __len__(self):
         return len(self.state)
 
     def __str__(self):
-        return self.state
+        s = ""
+        for symbol in self.state:
+            s += str(symbol) + " "
+
+        return s
 
     def __getitem__(self, n):
         return self.state[n]
@@ -56,31 +51,57 @@ class LSystem(object):
     def __iter__(self):
         return iter(self.state)
 
-class ProbLSystem(LSystem):
-    """A stochastic LSystem."""
-    def __init__(self, axiom, rules):
-        super().__init__(axiom, rules)
+class Symbol(object):
+    def replace(self):
+        return (self,)
+    
+    def interpret(self, *args):
+        pass
 
-        self.total = {}
-        for symbol, successors in self.rules.items():
-            self.total[symbol] = 0
-            for successor in successors:
-                self.total[symbol] += successor[0]
+    def __str__(self):
+        return self.__class__.__name__
 
-    def _get_successor(self, symbol):
-        variants = self.rules[symbol]
+class Const(Symbol):
+    CAN_NEIGHBOR = False
+
+class Var(Symbol):
+    CAN_NEIGHBOR = True
+
+class ContextVar(Var):
+    def __init__(self):
+        self.neighbors = (None, None)
+    
+    def get_neighbors(self, lsystem):
+        pos = lsystem.state.index(self)
+        rneighbor, lneighbor = None, None
+        lbound, rbound = lambda pos: pos >= 0, lambda pos: pos < len(lsystem)
         
-        choosen_variant = random() * self.total[symbol]
+        for i in range(1, max(len(lsystem)-pos, pos)):
+            lpos, rpos = pos-i, pos+i
+
+            if lbound(lpos):
+                if lneighbor is None and isinstance(lsystem[lpos], Var):
+                    lneighbor = lsystem[lpos]
+                    if rneighbor is not None:
+                        break
+
+            if rbound(rpos):
+                if rneighbor is None and isinstance(lsystem[rpos], Var):
+                    rneighbor = lsystem[rpos]
+                    if lneighbor is not None:
+                        break
+            
+            if not(lbound(lpos)) and not(rbound(rpos)):
+                break
+
+        return (lneighbor, rneighbor)
+
+def choose(*rules):
+        total = sum([prob for (prob, rule) in rules])
+        choosen_rule = random() * total
 
         sum_prev = 0
-        for variant in variants:
-            sum_prev += variant[0]
-            if sum_prev >= choosen_variant:
-                return variant[1]
-
-class ContexLSystem(LSystem):
-    pass
-
-class ParametricLSystem(LSystem):
-    pass
-
+        for (prob, rule) in rules:
+            sum_prev += prob
+            if sum_prev >= choosen_rule:
+                return rule
