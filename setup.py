@@ -1,22 +1,23 @@
 from setuptools import setup
 
+def readme():
+    with open("README.md") as f:
+        return f.read()
+
 setup(
     name="LindenmayerSystem",
     version="0.1",
-    description="A implementation of Lindenmayer systems including context sensitive and probalistic variation.",
+    description="",
+    long_description=readme(),
     url="",
     author="Pixelwar",
     author_email="code@pxlwr.de",
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
+        "Intended Audience :: Science/Research",
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3.5",
-        "Topic :: Scientific/Engineering :: Mathematics",
-    ],
-    install_requires=[
-        "attr"
     ],
     license="MIT",
     py_modules=["lsystem"],
