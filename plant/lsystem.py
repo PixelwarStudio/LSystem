@@ -8,6 +8,7 @@ class LSystem(object):
     def __init__(self, axiom):
         self.axiom = axiom
         self.state = self.axiom
+
         self.generation = 0
     
     def step(self, steps=1):

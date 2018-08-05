@@ -1,6 +1,5 @@
-"""Here you can find some common Symbols suited to interpreted with PillowTurtle"""
 from PillowTurtle import Turtle
-from lsystem import LSystem, Var, Const, Symbol
+from plant.lsystem import LSystem, Symbol, Const
 
 # Variables
 class Forward(Symbol):
@@ -14,7 +13,7 @@ class ForwardWithoutDrawing(Forward):
     def interpret(self, args):
         args[0].up()
         super().interpret(self, args)
-        args[1].down()
+        args[0].down()
 
 # Constants
 class Rotate(Const):
