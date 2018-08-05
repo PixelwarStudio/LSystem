@@ -1,7 +1,7 @@
 from PIL import Image
 from PillowTurtle import Turtle
-from lsystem import LSystem, ContextVar
-from symbols import Forward, Rotate, Push, Pop
+from plant.lsystem import LSystem, ContextVar
+from plant.symbols import Forward, Rotate, Push, Pop
 from random import randrange
 
 class F(Forward):

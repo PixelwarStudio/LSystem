@@ -1,5 +1,5 @@
-from lsystem import Var, Const, LSystem
-from symbols import Forward, Rotate as Rot
+from plant.lsystem import Var, Const, LSystem
+from plant.symbols import Forward, Rotate as Rot
 from PillowTurtle import Turtle
 from PIL import Image
 

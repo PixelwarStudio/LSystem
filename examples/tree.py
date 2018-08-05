@@ -1,6 +1,6 @@
 from PIL import Image
-from lsystem import LSystem, Const, Var
-from symbols import Rotate as Rot, Push, Pop
+from plant.lsystem import LSystem, Const, Var
+from plant.symbols import Rotate as Rot, Push, Pop
 from PillowTurtle import Turtle
 from random import randint
 

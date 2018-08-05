@@ -1,7 +1,7 @@
-from symbols import Forward, Rotate, Pop, Push, Var
 from PIL import Image
 from PillowTurtle import Turtle
-from lsystem import LSystem
+from plant.lsystem import LSystem, Var
+from plant.symbols import Push, Rotate, Forward, Pop, Push
 
 class F(Forward):
     def __init__(self):
