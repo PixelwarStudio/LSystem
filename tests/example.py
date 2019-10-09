@@ -1,4 +1,4 @@
-from lsystem import LSystem, Var, Const
+from plant.lsystem import LSystem, Var, Const
 
 # Variables
 # Algae

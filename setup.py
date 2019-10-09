@@ -5,7 +5,7 @@ def readme():
         return f.read()
 
 setup(
-    name="LindenmayerSystem",
+    name="plant",
     version="0.1",
     description="",
     long_description=readme(),
@@ -20,6 +20,6 @@ setup(
         "Programming Language :: Python :: 3.5",
     ],
     license="MIT",
-    py_modules=["lsystem"],
+    packages=["plant"],
     zip_safe=False
 )
