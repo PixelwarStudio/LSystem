@@ -63,10 +63,10 @@ class Symbol(object):
         return self.__class__.__name__
 
 class Const(Symbol):
-    CAN_NEIGHBOR = False
+    pass
 
 class Var(Symbol):
-    CAN_NEIGHBOR = True
+    pass 
 
 class ContextVar(Var):
     def __init__(self):
@@ -96,13 +96,3 @@ class ContextVar(Var):
                 break
 
         return (lneighbor, rneighbor)
-
-def choose(*rules):
-        total = sum([prob for (prob, rule) in rules])
-        choosen_rule = random() * total
-
-        sum_prev = 0
-        for (prob, rule) in rules:
-            sum_prev += prob
-            if sum_prev >= choosen_rule:
-                return rule
