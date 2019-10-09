@@ -106,3 +106,4 @@ venv.bak/
 
 test.py
 test.png
+.vscode/settings.json
