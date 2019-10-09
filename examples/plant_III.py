@@ -1,8 +1,8 @@
+from random import choices
 from PIL import Image
 from PillowTurtle import Turtle
-from plant.lsystem import LSystem, choose
+from plant.lsystem import LSystem
 from plant.symbols import Forward, Rotate as Rot, Push, Pop
-from random import randrange
 
 class F(Forward):
     def __init__(self):
@@ -10,12 +10,11 @@ class F(Forward):
 
     def replace(self):
         angle = 25.7
-        return choose(
-            (1, (F(), Push(), Rot(angle), F(), Pop(), F(), Push(), Rot(-angle), F(), Pop(), F())),
-            (1, (F(), Push(), Rot(angle), F(), Pop(), F())),
-            (1, (F(), Push(), Rot(-angle), F(), Pop(), F()))
-        )
- 
+        return choices((
+            (F(), Push(), Rot(angle), F(), Pop(), F(), Push(), Rot(-angle), F(), Pop(), F()),
+            (F(), Push(), Rot(angle), F(), Pop(), F()),
+            (F(), Push(), Rot(-angle), F(), Pop(), F())
+        ))[0]
 
 def main():
     im = Image.new("RGB", (1000, 1000))
