@@ -1,32 +1,33 @@
 from PillowTurtle import Turtle
-from plant.lsystem import LSystem, Symbol, Const
+from plant.lsystem import LSystem, Symbol, Var, Const, AbstractPush, AbstractPop, Interpretable
 
-# Variables
-class Forward(Symbol):
+class Forward(Symbol, Interpretable):
     def __init__(self, dist=5):
         self.dist = dist
     
     def interpret(self, args):
         args[0].forward(self.dist)
 
-class ForwardWithoutDrawing(Forward):
+class ForwardWithoutDrawing(Symbol, Interpretable):
+    def __init__(self, dist=5):
+        self.dist = dist
+
     def interpret(self, args):
         args[0].up()
         super().interpret(self, args)
         args[0].down()
 
-# Constants
-class Rotate(Const):
+class Rotate(Symbol, Interpretable):
     def __init__(self, angle):
         self.angle = angle
     
     def interpret(self, args):
         args[0].rotate(self.angle)
 
-class Push(Const):
+class Push(AbstractPush, Interpretable):
     def interpret(self, args):
         args[0].push()
 
-class Pop(Const):
+class Pop(AbstractPop, Interpretable):
     def interpret(self, args):
         args[0].pop()

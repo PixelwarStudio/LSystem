@@ -1,10 +1,10 @@
 from PIL import Image
-from plant.lsystem import LSystem, Const, Var
+from plant.lsystem import LSystem, Const, Var, Interpretable
 from plant.symbols import Rotate as Rot, Push, Pop
 from PillowTurtle import Turtle
 from random import randint
 
-class Branch(Var):
+class Branch(Var, Interpretable):
     def __init__(self, length, width):
         self.length = length
         self.width = width
@@ -33,7 +33,7 @@ class Branch(Var):
         turtle.width = self.width
         turtle.forward(self.length)
 
-class Leaf(Const):
+class Leaf(Const, Interpretable):
     def interpret(self, args):
         turtle = args[0]
         turtle.color = (10, 230, 40)
